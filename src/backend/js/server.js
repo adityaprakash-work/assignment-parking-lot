@@ -1,16 +1,15 @@
+require('dotenv').config({ path: '../../env/.env' });
 const jwt = require("jsonwebtoken");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const { CreateUser, CheckUser, BookParking, AddReview, FetchParkingSlots, FetchBookings } = require("./DatabaseUtils.js");
-const { ValidateToken } = require("./AuthUtils.js");
+const { CreateUser, CheckUser, BookParking, AddReview, FetchParkingSlots, FetchBookings } = require("./databaseUtils.js");
+const { ValidateToken } = require("./authUtils.js");
 
-const homePageURL = "http://localhost:5500/Code/Html/Index.html";
+const homePageURL = process.env.HOME_PAGE_URL;
 const app = express();
-const PORT = 8080;
-
-// ! Need to hide it (probably as an Environment Variable)
-const KEY = "THIS_IS_A_TEST_KEY";
+const PORT = process.env.PORT || 8080;
+const KEY = process.env.JWT_KEY;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -19,7 +18,6 @@ app.post("/api/signup", async (req, res) => {
     const { username, email, password } = req.body;
     try {
         const message = await CreateUser(username, email, password);
-        // TODO: Make redirection better
         const token = jwt.sign({ email: email }, KEY, { expiresIn: "1h" });
         res.status(200).json({ success: true, message: message, redirectTo: homePageURL, token: token });
     } catch (err) {
@@ -64,11 +62,7 @@ app.post("/api/booking", async (req, res) => {
     const { parkingId, userId } = req.body;
     try {
         const message = await BookParking(parkingId, userId);
-        // if (message == "Booked") {
         res.status(200).json({ success: true, message: message });
-        // } else {
-        //     res.status(400).json({ success: false, message: "Selected Parking is already Booked!" });
-        // }
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
     }
@@ -90,5 +84,4 @@ app.get("/api/protected", ValidateToken, (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
-    // console.log(`Website Hosted on ${homePageURL}`);
 });

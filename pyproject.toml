@@ -1,0 +1,7 @@
+[project]
+name = "assignment-parking-lot"
+version = "0.0.1"
+description = "Assignment 1 for CS303 Software Engineering"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []

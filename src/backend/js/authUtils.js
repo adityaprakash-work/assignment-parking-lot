@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
+require('dotenv').config({ path: '../../env/.env' });
 
-// ! Bad
-const KEY = "THIS_IS_A_TEST_KEY";
+const KEY = process.env.JWT_KEY;
 
 function ValidateToken(request, result, next) {
     const token = request.headers["authorization"];

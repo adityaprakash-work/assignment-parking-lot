@@ -5,7 +5,7 @@ const Database = new SQL.Database("Database/Main.db", (err) => {
         console.error("Error Opening the database! (InitDB.js)");
     } else {
         console.log("Database initialized successfully! (InitDB.js)");
-    }  
+    }
 });
 
 function AddParkingSlots(numberOfSlots = 9) {
@@ -41,13 +41,13 @@ Database.serialize(() => {
             email TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL
         );`
-    , (err) => {
-        if (err) {
-            console.error("Users Table creation failed!", err.message);
-        } else {
-            console.log("Users Table created successfully!");
-        }
-    });
+        , (err) => {
+            if (err) {
+                console.error("Users Table creation failed!", err.message);
+            } else {
+                console.log("Users Table created successfully!");
+            }
+        });
 
     Database.run(
         `CREATE TABLE IF NOT EXISTS ParkingLot (
@@ -55,14 +55,14 @@ Database.serialize(() => {
             occupant INTEGER NOT NULL DEFAULT -1,
             FOREIGN KEY(occupant) REFERENCES Users(id) ON DELETE SET DEFAULT
         );`
-    , (err) => {
-        if (err) {
-            console.error("Parking Lot Table creation failed!", err.message);
-        } else {
-            console.log("Parking Lot Table created successfully!");
-            AddParkingSlots();
-        }
-    });
+        , (err) => {
+            if (err) {
+                console.error("Parking Lot Table creation failed!", err.message);
+            } else {
+                console.log("Parking Lot Table created successfully!");
+                AddParkingSlots();
+            }
+        });
 
     Database.run(
         `CREATE TABLE IF NOT EXISTS Reviews (
@@ -76,7 +76,7 @@ Database.serialize(() => {
             } else {
                 console.log("Reviews Table created successfully!");
             }
-    });
+        });
 
 
 });

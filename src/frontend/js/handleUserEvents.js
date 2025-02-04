@@ -1,21 +1,22 @@
 const eContainer = document.querySelector(".container");
 const bookings = document.getElementById("bookings");
 
+const API_BASE_URL = process.env.API_BASE_URL;
+
 window.onload = async () => {
     await FetchParkingData();
-    // await checkIfLoggedIn();
     UpdateStyles();
 };
 
 async function FetchParkingData() {
     try {
-        const response = await fetch("http://localhost:8080/api/parkingSlots");
+        const response = await fetch(`${API_BASE_URL}/parkingSlots`);
         const result = await response.json();
-    
+
         if (result.success) {
             populateParkingList(result.message);
         } else {
-            alert("No Parking Slots Avaiable!");
+            alert("No Parking Slots Available!");
         }
     } catch (error) {
         alert(`Error Occurred ${error}`);
@@ -26,12 +27,7 @@ function UpdateStyles() {
     let slots = document.getElementsByClassName("slot");
     for (let slot of slots) {
         if (slot.dataset.status != -1) {
-            // occupied
-            // slot.style.backgroundColor = "#D32F2F";
             slot.style.backgroundColor = "#dfacff";
-        } else {
-            // vacant
-            // slot.style.backgroundColor = "#388E3C";
         }
     }
 }
@@ -40,13 +36,12 @@ async function ValidateSession() {
     const token = localStorage.getItem("authToken");
 
     if (!token) {
-        // console.log("User is not logged in");
         alert("You Must LogIn or SignUp!");
         return false;
     }
 
     try {
-        const response = await fetch("http://localhost:8080/api/protected", {
+        const response = await fetch(`${API_BASE_URL}/protected`, {
             method: "GET",
             headers: {
                 "Authorization": token,
@@ -69,7 +64,7 @@ async function ValidateSession() {
 
 async function BookSlot(parkingId, userId) {
     try {
-        const response = await fetch("http://localhost:8080/api/booking", {
+        const response = await fetch(`${API_BASE_URL}/booking`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -83,7 +78,6 @@ async function BookSlot(parkingId, userId) {
             alert(result.message);
         } else {
             alert(result.error);
-            // alert("Selected Parking is already Booked!");
         }
     } catch (error) {
         alert(`Error occurred ${error}`);

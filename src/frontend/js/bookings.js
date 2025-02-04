@@ -1,5 +1,7 @@
 const eContainer = document.querySelector(".container");
 
+const API_BASE_URL = process.env.API_BASE_URL;
+
 window.onload = async () => {
     const bookings = await LoadBookings(localStorage.getItem("userId"));
     RenderBookings(bookings);
@@ -7,7 +9,7 @@ window.onload = async () => {
 
 async function LoadBookings(userId) {
     try {
-        const response = await fetch(`http://localhost:8080/api/fetchBookings?userId=${userId}`, {
+        const response = await fetch(`${API_BASE_URL}/fetchBookings?userId=${userId}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" }
         });
@@ -27,7 +29,7 @@ function RenderBookings(bookings) {
 
     const nBook = bookings.length;
     if (nBook == 0) {
-        alert("You Dont Have Any Booked Slots!");
+        alert("You Don't Have Any Booked Slots!");
         return;
     }
 
@@ -40,14 +42,6 @@ function RenderBookings(bookings) {
         eSlot.dataset.id = slot.id;
         eSlot.dataset.status = slot.occupant;
         eSlot.textContent = `Slot: ${slot.id}`;
-
-        // eSlot.addEventListener("click", async () => {
-        //     let session = await ValidateSession();
-        //     if (!session) {
-        //         return;
-        //     }
-        //     BookSlot(eSlot.dataset.id, localStorage.getItem("userId"));
-        // });
 
         eContainer.appendChild(eSlot);
     }

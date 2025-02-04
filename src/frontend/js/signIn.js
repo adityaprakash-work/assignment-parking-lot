@@ -1,22 +1,19 @@
-import { GetInput } from "../backend/Utils.js";
+import { GetInput } from "../../backend/js/utils.js";
 
 const eEmail = document.getElementById("email");
 const ePassword = document.getElementById("password");
 const eButton = document.getElementById("submit");
 
-// console.log(eButton);
-// console.log(eEmail);
-// console.log(ePassword);
+const API_BASE_URL = process.env.API_BASE_URL;
 
 eButton.addEventListener("click", async (event) => {
-    // Prevent form submission which will now be handled by JS
     event.preventDefault();
 
     const email = GetInput(eEmail);
     const password = GetInput(ePassword);
 
     try {
-        const response = await fetch("http://localhost:8080/api/signin", {
+        const response = await fetch(`${API_BASE_URL}/signin`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -35,7 +32,6 @@ eButton.addEventListener("click", async (event) => {
             alert(result.message);
         }
     } catch (error) {
-        // console.error("Failed to connect to the backend:", error);
         alert("Failed to connect to the backend:", error);
     }
 

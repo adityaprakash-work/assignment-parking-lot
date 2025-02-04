@@ -1,12 +1,14 @@
-import { GetInput } from "../backend/Utils.js";
+import { GetInput } from "../../backend/js/utils.js";
 
 const eReview = document.getElementById("reviewText");
 const eButton = document.getElementById("submit");
 
-eButton.addEventListener("click", async (event) => {
-    event.preventDefault(); 
+const API_BASE_URL = process.env.API_BASE_URL;
 
-    const review = eReview.value.trim(); 
+eButton.addEventListener("click", async (event) => {
+    event.preventDefault();
+
+    const review = eReview.value.trim();
     console.log("function called")
 
     if (!review) {
@@ -14,15 +16,15 @@ eButton.addEventListener("click", async (event) => {
         return;
     }
 
-    const userId = "123"; 
+    const userId = "123";
 
     try {
-        const response = await fetch("http://localhost:8080/api/review", {
+        const response = await fetch(`${API_BASE_URL}/review`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ userId, review }), 
+            body: JSON.stringify({ userId, review }),
         });
 
         const result = await response.json();
